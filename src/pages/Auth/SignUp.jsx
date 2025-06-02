@@ -73,10 +73,17 @@ const SignUp = () => {
         }
       }
     } catch (error) {
-      if (error.response && error.response.data.message) {
-        setError(error.response.data.message);
+      console.error('Signup error details:', error);
+      
+      if (error.response && error.response.data && error.response.data.message) {
+        // Server returned an error message
+        setError(`Server error: ${error.response.data.message}`);
+      } else if (error.request) {
+        // Request was made but no response received
+        setError(`Network error: No response from server. Server might be down or unreachable.`);
       } else {
-        setError("Something went wrong. Please try again.");
+        // Error in setting up the request
+        setError(`Error: ${error.message || 'Something went wrong. Please try again.'}`);
       }
     }
   };
