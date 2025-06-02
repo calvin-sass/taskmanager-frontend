@@ -1,4 +1,4 @@
-export const BASE_URL = "https://taskmanager-backend-gray.vercel.app";
+export const BASE_URL = "https://taskmanager-backend-phi-one.vercel.app";
 
 export const API_PATHS = {
   AUTH: {
