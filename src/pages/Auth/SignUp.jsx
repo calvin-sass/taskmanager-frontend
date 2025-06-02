@@ -25,7 +25,9 @@ const SignUp = () => {
   const handleSignUp = async (e) => {
     e.preventDefault();
 
-    let profileImageUrl = "";
+    // Default to a generated avatar based on name if no profile pic is uploaded
+    // or if upload fails
+    let profileImageUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(fullName)}&background=random`;
 
     if (!fullName) {
       setError("Please enter full name.");
@@ -43,13 +45,20 @@ const SignUp = () => {
     }
 
     setError("");
-
+    
     //SignUp API Call
     try {
       // Upload image if present
       if (profilePic) {
-        const imgUploadRes = await uploadImage(profilePic);
-        profileImageUrl = imgUploadRes.imageUrl || "";
+        try {
+          const imgUploadRes = await uploadImage(profilePic);
+          if (imgUploadRes && imgUploadRes.imageUrl) {
+            profileImageUrl = imgUploadRes.imageUrl;
+          }
+        } catch (uploadError) {
+          console.warn('Profile image upload failed, using default avatar:', uploadError);
+          // Continue with registration using the default avatar URL
+        }
       }
       const response = await axiosInstance.post(API_PATHS.AUTH.REGISTER, {
         name: fullName,
