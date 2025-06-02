@@ -14,15 +14,15 @@ const uploadImage = async (imageFile) => {
 
   const formData = new FormData();
   formData.append("file", imageFile);
-  formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
-  formData.append("cloud_name", CLOUDINARY_CLOUD_NAME);
+  formData.append("upload_preset", uploadPreset);
+  formData.append("cloud_name", cloudName);
 
   try {
     console.log("Starting Cloudinary upload...");
-    
+
     // Direct upload to Cloudinary (no backend needed)
     const response = await fetch(
-      `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`,
+      `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
       {
         method: "POST",
         body: formData,
@@ -37,9 +37,9 @@ const uploadImage = async (imageFile) => {
 
     const data = await response.json();
     console.log("Upload successful:", data);
-    
+
     return {
-      imageUrl: data.secure_url
+      imageUrl: data.secure_url,
     };
   } catch (error) {
     console.error("Error uploading image to Cloudinary:", error);
